@@ -1,0 +1,7 @@
+{
+  "framework": "jasmine2",
+  "src_files": [
+      "Validation.spec.js",
+      "Validation.js"
+  ]
+}

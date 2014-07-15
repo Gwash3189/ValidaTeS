@@ -37,7 +37,8 @@ var SubValidator = (function () {
 })();
 var Validator = (function () {
     function Validator() {
-        this.RuleArray = Array();
+        this.FlagString = "Flag";
+        this.CheckString = "Check";
         this.sub = new SubValidator();
     }
     Validator.prototype.For = function (value) {
@@ -58,43 +59,19 @@ var Validator = (function () {
     };
     Validator.prototype.Rules = function (callback) {
         callback.call(this.sub, this.sub);
-        this.RuleArray.push(new Rule(this.prop, this.sub, this.instance));
+        this.Rule = new Rule(this.prop, this.sub, this.instance);
         return this;
     };
     Validator.prototype.Validate = function () {
-        var results = new Array();
-        for (var i = 0; i < this.RuleArray.length; i++) {
-            for (var key in this.RuleArray[i]) {
-                if (this.RuleArray[i].hasOwnProperty(key) && key === "subValidator") {
-                    for (var sub in this.RuleArray[i][key]) {
-                        if (sub.indexOf("Flag") > -1 && this.RuleArray[i][key][sub] === true) {
-                            var check = sub.replace("Flag", "Check");
-                            results.push(this.RuleArray[i][key][check](this.RuleArray[i].instance[this.RuleArray[i].property]));
-                        }
-                    }
-                }
+        var _this = this;
+        var results = [];
+        Object.keys(this.Rule).map(function (propName) {
+            if (propName.indexOf(_this.FlagString) > -1 && _this.Rule.subValidator[propName] === true) {
+                var check = propName.replace(_this.FlagString, _this.CheckString);
+                results.push(_this.Rule.subValidator[check](_this.Rule.instance[_this.Rule.property]));
             }
-            return results.indexOf(false) === -1;
-        }
+        });
+        return results.indexOf(false) === -1;
     };
     return Validator;
 })();
-
-var Person = (function () {
-    function Person(Name) {
-        this.Name = Name;
-    }
-    return Person;
-})();
-    var pers = new Person("Name");
-    pers.Name = "Vlad";
-    var BeValidName = function (name) {
-        return name === "Vlad";
-    };
-    var PersonValidator = new Validator().For(pers).Property("Name").Rules(function (Rules) {
-        Rules.NotEmpty();
-        Rules.NotEqual("Joe");
-        Rules.MustBe(BeValidName);
-    });
-    console.log(PersonValidator.Validate());
-

@@ -41,10 +41,12 @@ class SubValidator<T> {
 	}
 }
 class Validator<T>{
-	private RuleArray = Array<Rule<T>>();
+	private Rule: Rule<T>;
 	private instance: any;
 	private prop: string;
 	private toValidate;
+	private FlagString = "Flag";
+	private CheckString = "Check";
 	private sub = new SubValidator();
 	For(value:any) {
 		if(typeof value === "object"){
@@ -64,46 +66,17 @@ class Validator<T>{
 	}
 	Rules(callback: (subValidator: SubValidator<T>) => void) {
 		callback.call(this.sub, this.sub);
-		this.RuleArray.push(new Rule(this.prop, this.sub, this.instance));
+		this.Rule = new Rule<T>(this.prop, this.sub, this.instance);
 		return this;
 	}
 	Validate() {
-		var results = new Array<boolean>();
-		for (var i = 0; i < this.RuleArray.length; i++) {
-			for (var key in this.RuleArray[i]) {
-				if (this.RuleArray[i].hasOwnProperty(key) && key === "subValidator") {
-					for (var sub in this.RuleArray[i][key]) {
-						if (sub.indexOf("Flag") > -1 && this.RuleArray[i][key][sub] === true) {
-							var check = sub.replace("Flag", "Check");
-							results.push(this.RuleArray[i][key][check](this.RuleArray[i].instance[this.RuleArray[i].property]));
-						}
-					}
-
-				}
+		var results = [];
+		Object.keys(this.Rule).map((propName) => {
+			if (propName.indexOf(this.FlagString) > -1 && this.Rule.subValidator[propName] === true) {
+				var check = propName.replace(this.FlagString, this.CheckString);
+				results.push(this.Rule.subValidator[check](this.Rule.instance[this.Rule.property]));
 			}
-			return results.indexOf(false) === -1;
-		}
-	}
-
-}
-
-class Person {
-	constructor(public Name: string) {}
-}
-
-	
-	var pers = new Person("debuName");
-	pers.Name = "Vlad";
-	var BeValidName = function(name) {
-		return name === "Vlad";
-	}
-	var PersonValidator = new Validator<Person>()
-		.For(pers)
-		.Property("Name")
-		.Rules((Rules) => {
-			Rules.NotEmpty();
-			Rules.NotEqual("Joe");
-			Rules.MustBe(BeValidName);
 		});
-		console.log(PersonValidator.Validate());
-		
+		return results.indexOf(false) === -1;
+	}
+}
