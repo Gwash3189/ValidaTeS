@@ -11,16 +11,10 @@ var SubValidator = (function () {
     function SubValidator() {
     }
     SubValidator.prototype.NotEqualCheck = function (value) {
-        if (value === this.NotEqualValue) {
-            return false;
-        }
-        return true;
+        return value !== this.NotEqualValue;
     };
     SubValidator.prototype.NotEmptyCheck = function (value) {
-        if (value === "") {
-            return false;
-        }
-        return true;
+        return value !== "";
     };
     SubValidator.prototype.NotEmpty = function () {
         this.NotEmptyFlag = true;
@@ -36,19 +30,17 @@ var SubValidator = (function () {
     return SubValidator;
 })();
 var Validator = (function () {
-    function Validator() {
+    function Validator(value) {
         this.FlagString = "Flag";
         this.CheckString = "Check";
         this.sub = new SubValidator();
-    }
-    Validator.prototype.For = function (value) {
         if (typeof value === "object") {
             this.instance = value;
         } else {
             this.instance = value();
         }
         return this;
-    };
+    }
     Validator.prototype.Property = function (value) {
         if (typeof value === "string") {
             this.prop = value;

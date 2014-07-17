@@ -1,0 +1,30 @@
+{
+  "name": "ValidaTeS",
+  "version": "0.0.1",
+  "description": "Object validation in TypeScript",
+  "main": "Gruntfile.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "grunt"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gwash3189/ValidaTeS.git"
+  },
+  "keywords": [
+    "validation",
+    "typescript"
+  ],
+  "author": "Adam Beck",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/Gwash3189/ValidaTeS/issues"
+  },
+  "devDependencies": {
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-ts": "~1.11.4",
+    "grunt": "~0.4.5"
+  }
+}

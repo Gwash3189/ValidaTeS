@@ -2,7 +2,7 @@
 class Rule<T> {
 	property: string;
 	instance: T;
-	subValidator: SubValidator<T>
+	subValidator: SubValidator<T>;
 	constructor(property: string, subValidator: SubValidator<T>, instance: T) {
 		this.property = property;
 		this.subValidator = subValidator;
@@ -10,23 +10,20 @@ class Rule<T> {
 	}
 }
 
+
+
 class SubValidator<T> {
 	private NotEmptyFlag: boolean;
 	private NotEqualFlag: boolean;
 	private NotEqualValue: any;
-	private MustBeCheck: (value: any) => boolean
+	private MustBeCheck: (value: any) => boolean;
 	private MustBeFlag: boolean;
 	private NotEqualCheck(value) {
-		if(value === this.NotEqualValue){
-			return false;
-		}
-		return true;
+		return value !== this.NotEqualValue;
+
 	}
 	private NotEmptyCheck(value:string) {
-		if (value === "") {
-			return false;
-		}
-		return true;
+		return value !== "";
 	}
 	public NotEmpty() {
 		this.NotEmptyFlag = true;
@@ -44,18 +41,17 @@ class Validator<T>{
 	private Rule: Rule<T>;
 	private instance: any;
 	private prop: string;
-	private toValidate;
 	private FlagString = "Flag";
 	private CheckString = "Check";
 	private sub = new SubValidator();
-	For(value:any) {
-		if(typeof value === "object"){
-			this.instance = value;
-		} else {
-			this.instance = value();
-		}
-		return this;
-	}
+    constructor(value: any) {
+        if(typeof value === "object"){
+            this.instance = value;
+        } else {
+            this.instance = value();
+        }
+        return this;
+    }
 	Property(value:any) {
 		if( typeof value === "string"){
 			this.prop = value;

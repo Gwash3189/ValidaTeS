@@ -20,11 +20,10 @@ declare class Validator<T> {
     private Rule;
     private instance;
     private prop;
-    private toValidate;
     private FlagString;
     private CheckString;
     private sub;
-    public For(value: any): Validator<T>;
+    constructor(value: any);
     public Property(value: any): Validator<T>;
     public Rules(callback: (subValidator: SubValidator<T>) => void): Validator<T>;
     public Validate(): boolean;

@@ -1,0 +1,12 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+      "jasmine/jasmine.d.ts": {
+          "commit": "0d74fcc01abf5bc0947bfb62c46b9b0b69eb6db4"
+      }
+  }
+}
